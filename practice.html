@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Suriya Merch Store</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', 'Times New Roman';
+            margin: 0;
+            background: #f4f4f4;
+            text-align: center;
+        }
+       #cart {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: 100vh;
+    background: black;
+    color: white;
+    padding: 20px;
+    overflow-y: auto;   /* THIS adds scroll */
+}
+
+
+
+        .header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px 40px;
+
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+
+    border-bottom: 1px solid #222;
+}
+
+/* Logo style */
+.logo {
+    font-family: Impact, sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: white;
+    animation: glow 2s infinite alternate;
+}
+
+/* Navigation */
+nav a {
+    margin-left: 25px;
+    text-decoration: none;
+    color: #bbb;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+/* Hover effect */
+nav a:hover {
+    color: white;
+    text-shadow: 0 0 5px #fff;
+}
+
+        .filters {
+            margin: 20px;
+        }
+
+        .filters button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: none;
+            background: black;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .products {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            width: 220px;
+            margin: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .insta {
+            margin: 30px;
+        }
+
+        .insta a {
+            background: #E1306C;
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .search input {
+    width: 60%;
+    padding: 12px;
+    font-size: 16px;
+    margin: 20px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+.checkout {
+    display: none;
+    background: white;
+    padding: 20px;
+    margin: 20px auto;
+    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.checkout input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+}
+.product {
+    position: relative;
+    width: 250px;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.product img {
+    width: 100%;
+    display: block;
+}
+
+/* normal info */
+.product-info {
+    text-align: center;
+    padding: 10px;
+}
+
+/* hidden overlay */
+.product-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+
+    opacity: 0;
+    transition: 0.3s ease;
+}
+
+/* show overlay on hover */
+.product:hover .product-overlay {
+    opacity: 1;
+}
+
+.rating {
+    color: gold;
+    font-size: 18px;
+    margin-top: 8px;
+}
+
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 5px #fff,
+                     0 0 10px #fff,
+                     0 0 20px #e07ce9,
+                     0 0 30px #e07ce9;
+    }
+
+    100% {
+        text-shadow: 0 0 10px #fff,
+                     0 0 20px #e07ce9,
+                     0 0 30px #e07ce9,
+                     0 0 40px #e07ce9;
+    }
+}
+
+    </style>
+    
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">URBAN MERCH</div>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Shop</a>
+        <a href="#">Collections</a>
+        <a href="#">Contact</a>
+        <a href="https://instagram.com/__justt_sukuna" target="_blank">Instagram</a>
+    </nav>
+
+</header>
+
+<div class="cart">
+    <h3>Your Cart</h3>
+    <ul id="cart-items"></ul>
+    <p>Total: $<span id="cart-total">0</span></p>
+
+    <button onclick="checkout()">Checkout</button>
+</div>
+<div id="checkout-box" class="checkout">
+    <h3>Checkout</h3>
+
+    <input id="name" placeholder="Your name">
+    <input id="address" placeholder="Address">
+
+    <button onclick="confirmPurchase()">Confirm Purchase</button>
+</div>
+
+
+<div class="filters">
+    <button onclick="filterProducts('all')">All</button>
+    <button onclick="filterProducts('tops')">Tops</button>
+    <button onclick="filterProducts('bottoms')">Bottoms</button>
+    <button onclick="filterProducts('accessories')">Accessories</button>
+</div>
+
+<div class="search">
+    <input type="text" placeholder="Search merch..." onkeyup="searchProducts()">
+</div>
+
+
+<div class="products" id="product-list"></div>
+
+
+<div class="insta">
+    <a href="https://instagram.com/__justt_sukuna">
+        Follow us on Instagram 📸
+    </a>
+</div>
+
+
+    <script>
+
+
+function filterProducts(category) {
+    let items = document.querySelectorAll('.card');
+
+    items.forEach(item => {
+        if (category === 'all' || item.classList.contains(category)) {
+            item.style.display = "block";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
+
+function searchProducts() {
+    let input = document.querySelector(".search input").value.toLowerCase();
+    let items = document.querySelectorAll(".card");
+
+    items.forEach(card => {
+        let title = card.querySelector("h3").textContent.toLowerCase();
+
+        if (title.includes(input)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+let total = 0;
+let cart = [];
+
+function addToCart(name, price) {
+    cart.push({name, price});
+
+    let list = document.getElementById("cart-items");
+    let item = document.createElement("li");
+    item.textContent = name + " — $" + price;
+    list.appendChild(item);
+
+    total += price;
+    document.getElementById("cart-total").textContent = total;
+}
+
+function checkout() {
+    if (cart.length === 0) {
+        alert("Cart is empty!");
+        return;
+    }
+    document.getElementById("checkout-box").style.display = "block";
+}
+
+function confirmPurchase() {
+    let name = document.getElementById("name").value;
+    let address = document.getElementById("address").value;
+
+    if (!name || !address) {
+        alert("Please fill all details!");
+        return;
+    }
+
+    alert("Purchase successful! 🎉\nThank you " + name);
+
+    // reset cart
+    cart = [];
+    total = 0;
+    document.getElementById("cart-items").innerHTML = "";
+    document.getElementById("cart-total").textContent = "0";
+    document.getElementById("checkout-box").style.display = "none";
+}
+</script>
+
+<script>
+const products = [
+    {
+        name: "Cool T-Shirt",
+        price: 25,
+        image: "tshirt.jpg",
+        category: "tops",
+        description: "Premium cotton streetwear tee",
+        rating: "★★★★★ 4.8"
+     },
+    {
+        name: "Black Hoodie",
+        price: 45,
+        image: "hoodie.jpg",
+        category: "tops",
+        description: "Heavyweight oversized hoodie",
+        rating: "★★★★☆ 4.6"
+    },
+    {
+        name: "White O-Neck Embroideried Cotton T Shirt",
+        price: 99,
+        image: "White O-Neck Embroideried Cotton T Shirt.jpg",
+        category: "tops",
+        description: "Lightweight comfy summer fit",
+        rating: "★★★★☆ 4.6"
+    },
+    {
+        name: "Ferrari jacket",
+        price: 199,
+        image: "Ferrari jacket.jpg",
+        category: "tops",
+        description: "Thick leather limited edition ferrari jacket",
+        rating: "★★★★☆ 4.6"
+    },
+    {
+        name: "Streetware Cap",
+        price: 15,
+        image: "cap.jpg",
+        category: "accessories",
+        description: "Slim stylish cap perfect for a hot day",
+        rating: "★★★★☆ 4.6"
+    },
+    {
+        name: "Overssized T-Shirt",
+        price: 49,
+        image: "Oversized T.jpg",
+        category: "tops",
+        description: "Thick leather limited edition ferrari jacket",
+        rating: "★★★★☆ 4.6"
+    },
+    {
+        name: "Baggy pant",
+        price: 149,
+        image: "Baggy pant.jpg",
+        category: "bottoms",
+        description: "Light colour 6-Pocket Baggy Pant",
+        rating: "★★★★☆ 4.6"
+    },
+    {
+        name: "Baggy Jean",
+        price: 100,
+        image: "Baggy Jean.jpg",
+        category: "bottoms",
+        description: "Thick leather limited edition ferrari jacket",
+        rating: "★★★★☆ 4.6"
+    },
+    {
+        name: "Streetwear Pants",
+        price: 299,
+        image: "Streetwear Pants.jpg",
+        category: "bottoms",
+        description: "Thick leather limited edition ferrari jacket",
+        rating: "★★★★☆ 4.6"
+    },
+    
+    
+
+    
+
+
+];
+
+    
+
+const container = document.getElementById("product-list");
+
+products.forEach(p => {
+    container.innerHTML += `
+        <div class="card ${p.category}">
+            <img src="${p.image}">
+            <div class="card-info">
+                <h3>${p.name}</h3>
+                <p>$${p.price}</p>
+                <button onclick="addToCart('${p.name}', ${p.price})">
+                    Add to Cart
+                </button>
+            </div>
+            <div class="card-overlay">
+                <p>${p.description}</p>
+                <p class="rating">${p.rating}</p>
+            </div>
+        </div>
+    `;
+});
+</script>
+
+</body>
+
+</html>
